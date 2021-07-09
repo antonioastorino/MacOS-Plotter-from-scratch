@@ -14,4 +14,4 @@ fi
 
 echo "Running"
 open $BD/plotter.app
-tail -f /Volumes/DataMBP/plotter.log
+
