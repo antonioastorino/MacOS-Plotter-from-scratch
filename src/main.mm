@@ -2,27 +2,16 @@
  The main entry point to "plotter"
  */
 
-#import "../include/PLTGenericView.hh"
+#import "PLTAppDelegate.hh"
+#import "PLTGenericView.hh"
+#import "PLTGlobal.hh"
+#import "PLTWindow.hh"
 #import <Cocoa/Cocoa.h>
-
-//#import "AppDelegate.h"
-
-static bool appRunning = TRUE;
-
-@interface appWindowDelegate : NSWindow <NSWindowDelegate>
-;
-@end
-
-@implementation appWindowDelegate
-- (void)windowWillClose:(NSNotification*)notification
-{
-    appRunning = FALSE;
-}
-@end
 
 int main(int argc, const char* argv[])
 {
-    FILE* log_file = fopen("/Volumes/DataMBP/plotter.log", "w");
+    PLTGlobal.gAppRunning = TRUE;
+    FILE* log_file        = fopen("/Volumes/DataMBP/plotter.log", "w");
 
     // Retrieve the screen coordinates of the main screen
     NSRect screenRect = [[NSScreen mainScreen] frame];
@@ -38,21 +27,20 @@ int main(int argc, const char* argv[])
 
     NSApplication* myApplication = [NSApplication sharedApplication];
 
-    
-
     // Create a window
     // https://stackoverflow.com/questions/314256/how-do-i-create-a-cocoa-window-programmatically
-    NSWindow* window = [[NSWindow alloc] initWithContentRect:windowRect
-                                                   styleMask:windowStyleMask
-                                                     backing:NSBackingStoreBuffered
-                                                       defer:YES];
+    NSWindow* window = [[PLTWindow alloc] initWithContentRect:windowRect
+                                                    styleMask:windowStyleMask
+                                                      backing:NSBackingStoreBuffered
+                                                        defer:YES];
 
     [window setBackgroundColor:[NSColor blueColor]];
     [window makeKeyAndOrderFront:nil];
     [window setTitle:@"plotter"];
 
-    NSRect viewFrame = NSMakeRect(0, window.contentView.frame.size.height / 2 - 1, windowRect.size.width,
-                                  windowRect.size.height / 2);
+    NSRect viewFrame = NSMakeRect(0, window.contentView.bounds.size.height / 2 - 1,
+                                  window.contentView.bounds.size.width,
+                                  window.contentView.bounds.size.height / 2);
 
     PLTGenericView* newView = [[PLTGenericView alloc] initWithFrame:viewFrame];
     [newView.layer setBackgroundColor:[NSColor colorWithCalibratedRed:1.0f
@@ -62,27 +50,36 @@ int main(int argc, const char* argv[])
                                           .CGColor];
 
     [[window contentView] addSubview:newView];
-    NSLog(@"%@", [[NSApplication sharedApplication] mainWindow]);
 
-    appWindowDelegate* windowDelegate = [[appWindowDelegate alloc] init];
+    PLTAppDelegate* windowDelegate = [[PLTAppDelegate alloc] init];
     [window setDelegate:windowDelegate];
 
     NSEvent* event;
-    while (appRunning)
+    uint color = 0;
+
+    while (PLTGlobal.gAppRunning)
     {
-        do
+
+        event = [NSApp nextEventMatchingMask:NSEventMaskAny
+                                   untilDate:[NSDate distantFuture]
+                                      inMode:NSDefaultRunLoopMode
+                                     dequeue:YES];
+        if ([event type] != 0)
         {
-            event = [NSApp nextEventMatchingMask:NSEventMaskAny
-                                       untilDate:nil
-                                          inMode:NSDefaultRunLoopMode
-                                         dequeue:YES];
-            if ([event type] != 0)
-            {
-                fprintf(log_file, "%lu ", [event type]);
-                fflush(log_file);
-            }
-            [NSApp sendEvent:event];
-        } while (event != nil);
+
+            fprintf(log_file, "%lu ", [event type]);
+            fflush(log_file);
+        }
+        if ([event type] == NSEventTypeLeftMouseDown)
+        {
+            fprintf(log_file, "Mouse down\n");
+            fflush(log_file);
+        }
+        CGFloat floatColor = (CGFloat)color / 256.0f;
+        [newView setSomeColor:floatColor];
+        [newView setNeedsDisplay:YES];
+        [NSApp sendEvent:event];
+        color              = (color + 1) % 256;
     }
     fprintf(log_file, "%s\n", "Goodbye");
     return 0;

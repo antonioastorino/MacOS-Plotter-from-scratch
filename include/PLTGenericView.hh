@@ -4,9 +4,10 @@
 #import <Cocoa/Cocoa.h>
 
 @interface PLTGenericView : NSView
+@property CGFloat someColor;
 - (id)initWithFrame:(NSRect)frame;
 - (id)init;
-- (void)printSomething;
+- (void)drawRect:(NSRect)rect;
 @end
 
 #endif

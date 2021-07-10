@@ -1,10 +1,12 @@
 #!/bin/bash
 set -e
-BD="$(pwd)"
+BD="$(pwd)/$(dirname $0)/.."
+pushd "${BD}"
 echo "Building"
-${BD}/bin/build.sh
+bin/build.sh
+
 echo "Registering"
-/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$BD/plotter.app"
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "plotter.app"
 
 echo "Closing running instance"
 PID=$(ps aux | grep plotter.app/Contents/MacOS/plotter | grep -v grep | awk '{print $2}')
@@ -13,5 +15,7 @@ if ! [ -x ${PID} ]; then
 fi
 
 echo "Running"
-open $BD/plotter.app
+open plotter.app
+
+popd
 
