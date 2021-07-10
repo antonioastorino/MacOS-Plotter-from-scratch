@@ -8,6 +8,8 @@
     {
         self.wantsLayer = TRUE;
         self.someColor  = 0;
+        self.numOfPoints = 0;
+        self.points = nil;
     }
     return self;
 }
@@ -26,22 +28,24 @@
     CGContextRef ctx = [[NSGraphicsContext currentContext] CGContext];
 
     CGContextBeginPath(ctx);
-    CGContextMoveToPoint(ctx, 16.72, 7.22);
-    CGContextAddLineToPoint(ctx, 3.29, 20.83);
-    CGContextAddLineToPoint(ctx, 0.4, 18.05);
-    CGContextAddLineToPoint(ctx, 18.8, -0.47);
-    CGContextAddLineToPoint(ctx, 37.21, 18.05);
-    CGContextAddLineToPoint(ctx, 34.31, 20.83);
-    CGContextAddLineToPoint(ctx, 20.88, 7.22);
-    CGContextAddLineToPoint(ctx, 20.88, 42.18);
-    CGContextAddLineToPoint(ctx, 16.72, 42.18);
-    CGContextAddLineToPoint(ctx, 16.72, 7.22);
-    CGContextClosePath(ctx);
+    size_t pointIndex = 0;
+    if (self.numOfPoints)
+    {
+        Point2D* points = self.points;
+        CGContextMoveToPoint(ctx, points[0].x, points[0].y);
+
+        for (size_t i = 1; i < self.numOfPoints; i++)
+        {
+            CGContextAddLineToPoint(ctx, points[i].x, points[i].y);
+        }
+    }
     CGContextSetLineWidth(ctx, 1);
     const CGFloat colorArray[4] = {0, self.someColor, self.someColor, 1};
     CGColorSpaceRef colorspace  = CGColorSpaceCreateDeviceRGB();
     CGColorRef aColor           = CGColorCreate(colorspace, colorArray);
     CGContextSetStrokeColorWithColor(ctx, aColor);
     CGContextStrokePath(ctx);
+    self.numOfPoints = 0;
+    self.points = nil;
 }
 @end

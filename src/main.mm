@@ -7,9 +7,11 @@
 #import "PLTGlobal.hh"
 #import "PLTWindow.hh"
 #import <Cocoa/Cocoa.h>
+#import <stdlib.h>
 
 int main(int argc, const char* argv[])
 {
+
     PLTGlobal.gAppRunning = TRUE;
     FILE* log_file        = fopen("/Volumes/DataMBP/plotter.log", "w");
 
@@ -54,6 +56,17 @@ int main(int argc, const char* argv[])
     PLTAppDelegate* windowDelegate = [[PLTAppDelegate alloc] init];
     [window setDelegate:windowDelegate];
 
+    size_t numOfPoints = 100;
+    Point2D points[numOfPoints];
+    for (size_t i = 0; i < numOfPoints; i++)
+    {
+        points[i].x = (CGFloat)(2*i);
+        points[i].y = (CGFloat)arc4random_uniform(100);
+        // printf(log_file, "%lu\n",)
+    }
+    newView.points      = points;
+    newView.numOfPoints = numOfPoints;
+
     NSEvent* event;
     uint color = 0;
 
@@ -77,9 +90,9 @@ int main(int argc, const char* argv[])
         }
         CGFloat floatColor = (CGFloat)color / 256.0f;
         [newView setSomeColor:floatColor];
-        [newView setNeedsDisplay:YES];
+        // [newView setNeedsDisplay:YES];
         [NSApp sendEvent:event];
-        color              = (color + 1) % 256;
+        color = (color + 1) % 256;
     }
     fprintf(log_file, "%s\n", "Goodbye");
     return 0;
