@@ -4,20 +4,23 @@ BD="$(pwd)/$(dirname $0)/.."
 
 pushd $BD
 APP_DIR="plotter.app/Contents/MacOS/"
+DIST_ASSETS_DIR="plotter.app/Contents/Resources"
 OSX_LD_FLAGS="-framework Cocoa"
-FLAGS="-fobjc-arc -g -O3"
+FLAGS="-fobjc-arc -g -O0"
 INC="-Iinclude"
 BUILD_DIR="build"
 EXECUTABLE="${BUILD_DIR}/plotter"
 
 /bin/rm -f "${EXECUTABLE}"
 /bin/rm -rf \
-	"${BD}/plotter.app" \
+	"plotter.app" \
 	"${BUILD_DIR}"
 
 mkdir -p \
 	"${APP_DIR}" \
-	"${BUILD_DIR}"
+	"${BUILD_DIR}" \
+	"${DIST_ASSETS_DIR}"
+
 
 OBJC_SCR_FILES=$(basename $(ls src))
 OBJC_OBJ_FILES=""
@@ -42,5 +45,7 @@ clang -lc++ \
 
 set +x
 cp "${EXECUTABLE}" "${APP_DIR}"
+cp assets/* "${DIST_ASSETS_DIR}"
+# cp info.plist "plotter.app"
 
 popd
