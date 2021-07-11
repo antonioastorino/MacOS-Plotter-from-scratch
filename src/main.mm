@@ -3,6 +3,7 @@
  */
 
 #import "PLTAppDelegate.hh"
+#import "PLTApplication.hh"
 #import "PLTGenericView.hh"
 #import "PLTGlobal.hh"
 #import "PLTWindow.hh"
@@ -56,16 +57,12 @@ int main(int argc, const char* argv[])
     PLTAppDelegate* windowDelegate = [[PLTAppDelegate alloc] init];
     [window setDelegate:windowDelegate];
 
-    size_t numOfPoints = 100;
-    Point2D points[numOfPoints];
-    for (size_t i = 0; i < numOfPoints; i++)
+    PLTApplication* applicationObj = [[PLTApplication alloc] init];
+    if (![applicationObj loadPoints:@"path/to/file"])
     {
-        points[i].x = (CGFloat)(2*i);
-        points[i].y = (CGFloat)arc4random_uniform(100);
-        // printf(log_file, "%lu\n",)
+        exit(1);
     }
-    newView.points      = points;
-    newView.numOfPoints = numOfPoints;
+    [newView setPoints:applicationObj];
 
     NSEvent* event;
     uint color = 0;
@@ -90,7 +87,7 @@ int main(int argc, const char* argv[])
         }
         CGFloat floatColor = (CGFloat)color / 256.0f;
         [newView setSomeColor:floatColor];
-        // [newView setNeedsDisplay:YES];
+        [newView setNeedsDisplay:YES];
         [NSApp sendEvent:event];
         color = (color + 1) % 256;
     }

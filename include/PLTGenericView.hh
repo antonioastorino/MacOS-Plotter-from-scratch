@@ -2,20 +2,16 @@
 #define PLT_GENERIC_VIEW_HH
 
 #import <Cocoa/Cocoa.h>
-
-typedef struct Point2D
-{
-    CGFloat x;
-    CGFloat y;
-} Point2D;
+#import "PLTDataTypes.hh"
+#import "PLTApplication.hh"
 
 @interface PLTGenericView : NSView
 @property CGFloat someColor;
-@property size_t numOfPoints;
-@property Point2D* points;
+
 - (id)initWithFrame:(NSRect)frame;
 - (id)init;
 - (void)drawRect:(NSRect)rect;
+- (void)setPoints:(PLTApplication*)appObj;
 @end
 
 #endif
