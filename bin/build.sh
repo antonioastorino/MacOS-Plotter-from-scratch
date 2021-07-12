@@ -21,16 +21,15 @@ mkdir -p \
 	"${BUILD_DIR}" \
 	"${DIST_ASSETS_DIR}"
 
-
-OBJC_SCR_FILES=$(basename $(ls src/*.mm))
-C_SRC_FILES=$(basename $(ls src/c-compute/*.c))
+OBJC_SCR_FILES=$(ls src/*.mm)
+C_SRC_FILES=$(ls src/c-compute/*.c)
 OBJ_FILES=""
-
-echo $C_SRC_FILES
 
 set -x
 for obj_file in ${OBJC_SCR_FILES[@]}; do
-	obj_file_no_ext=${obj_file%.*}
+	obj_file_basename=$(basename $obj_file)
+	obj_file_no_ext=${obj_file_basename%.*}
+	echo $obj_file_no_ext
 	clang ${FLAGS} \
 		${INC} \
 		-c "${BD}/src/$obj_file_no_ext.mm" \
@@ -39,7 +38,8 @@ for obj_file in ${OBJC_SCR_FILES[@]}; do
 done
 
 for obj_file in ${C_SRC_FILES[@]}; do
-	obj_file_no_ext=${obj_file%.*}
+	obj_file_basename=$(basename $obj_file)
+	obj_file_no_ext=${obj_file_basename%.*}
 	clang ${FLAGS} \
 		${INC} \
 		-c "${BD}/src/c-compute/$obj_file_no_ext.c" \
