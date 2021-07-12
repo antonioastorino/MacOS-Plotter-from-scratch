@@ -7,14 +7,25 @@
 #import "PLTGenericView.hh"
 #import "PLTGlobal.hh"
 #import "PLTWindow.hh"
+#include "c/logger.h"
 #import <Cocoa/Cocoa.h>
-#import <stdlib.h>
+#include <os/log.h>
+#include <stdlib.h>
+#include <string.h>
 
 int main(int argc, const char* argv[])
 {
 
     PLTGlobal.gAppRunning = TRUE;
-    FILE* log_file        = fopen("/Volumes/DataMBP/plotter.log", "w");
+    // Getting the user's Lib folder
+    NSString* userLibFolder =
+        [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES)
+            objectAtIndex:0];
+
+    const char* userLibFolderStr = userLibFolder.UTF8String;
+    const char* appLogPath       = strcat((char*)userLibFolderStr, "/Logs/plotter.log");
+    init_logger(appLogPath, appLogPath);
+    LOG_INFO("Logger initialized!");
 
     // Retrieve the screen coordinates of the main screen
     NSRect screenRect = [[NSScreen mainScreen] frame];
@@ -77,13 +88,11 @@ int main(int argc, const char* argv[])
         if ([event type] != 0)
         {
 
-            fprintf(log_file, "%lu ", [event type]);
-            fflush(log_file);
+            LOG_TRACE("%lu", [event type]);
         }
         if ([event type] == NSEventTypeLeftMouseDown)
         {
-            fprintf(log_file, "Mouse down\n");
-            fflush(log_file);
+            LOG_TRACE("Mouse down");
         }
         CGFloat floatColor = (CGFloat)color / 256.0f;
         [newView setSomeColor:floatColor];
@@ -91,6 +100,6 @@ int main(int argc, const char* argv[])
         [NSApp sendEvent:event];
         color = (color + 1) % 256;
     }
-    fprintf(log_file, "%s\n", "Goodbye");
+    LOG_INFO("Goodbye");
     return 0;
 }
