@@ -22,10 +22,12 @@ mkdir -p \
 	"${DIST_ASSETS_DIR}"
 
 
-OBJC_SCR_FILES=$(basename $(ls src))
-OBJC_OBJ_FILES=""
+OBJC_SCR_FILES=$(basename $(ls src/*.mm))
+C_SRC_FILES=$(basename $(ls src/c-compute/*.c))
+OBJ_FILES=""
 
-echo $OBJC_SCR_FILES
+echo $C_SRC_FILES
+
 set -x
 for obj_file in ${OBJC_SCR_FILES[@]}; do
 	obj_file_no_ext=${obj_file%.*}
@@ -33,7 +35,16 @@ for obj_file in ${OBJC_SCR_FILES[@]}; do
 		${INC} \
 		-c "${BD}/src/$obj_file_no_ext.mm" \
 		-o "${BUILD_DIR}/$obj_file_no_ext.o"
-	OBJC_OBJ_FILES="${OBJC_OBJ_FILES} ${BUILD_DIR}/$obj_file_no_ext.o"
+	OBJ_FILES="${BUILD_DIR}/$obj_file_no_ext.o ${OBJ_FILES}"
+done
+
+for obj_file in ${C_SRC_FILES[@]}; do
+	obj_file_no_ext=${obj_file%.*}
+	clang ${FLAGS} \
+		${INC} \
+		-c "${BD}/src/c-compute/$obj_file_no_ext.c" \
+		-o "${BUILD_DIR}/$obj_file_no_ext.o"
+	OBJ_FILES="${BUILD_DIR}/$obj_file_no_ext.o ${OBJ_FILES}"
 done
 
 clang -lc++ \
@@ -41,11 +52,9 @@ clang -lc++ \
 	${OSX_LD_FLAGS} \
 	${INC} \
 	-o ${EXECUTABLE} \
-	${OBJC_OBJ_FILES}
-
+	${OBJ_FILES}
 set +x
 cp "${EXECUTABLE}" "${APP_DIR}"
 cp assets/* "${DIST_ASSETS_DIR}"
-# cp info.plist "plotter.app"
 
 popd

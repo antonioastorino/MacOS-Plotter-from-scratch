@@ -1,9 +1,8 @@
 #import "PLTGenericView.hh"
+#include "c/datahandler.h"
 
 @implementation PLTGenericView
 {
-    size_t numOfPoints;
-    Point2D* points;
     PLTApplication* applicationObj;
 }
 - (id)initWithFrame:(NSRect)frame
@@ -13,8 +12,6 @@
     {
         self.wantsLayer      = TRUE;
         self.someColor       = 0;
-        self->numOfPoints    = 0;
-        self->points         = nil;
         self->applicationObj = nil;
     }
     return self;
@@ -32,24 +29,30 @@
 - (void)setPoints:(PLTApplication*)appObj
 {
     self->applicationObj = appObj;
-    self->points         = appObj.loadedPoints;
-    self->numOfPoints    = appObj.numOfLoadedPoints;
 }
 
 - (void)drawRect:(NSRect)rect
 {
-    CGContextRef ctx = [[NSGraphicsContext currentContext] CGContext];
+    CGFloat* rawDataArray = self->applicationObj.rawDataArray;
+    size_t numOfElements  = self->applicationObj.numOfLoadedElements;
+    CGContextRef ctx      = [[NSGraphicsContext currentContext] CGContext];
 
     CGContextBeginPath(ctx);
-    size_t pointIndex = 0;
-    if (self->numOfPoints)
-    {
-        Point2D* p = self->points;
-        CGContextMoveToPoint(ctx, p[0].x, p[0].y);
+    CGFloat x = 0, y = 0;
 
-        for (size_t i = 1; i < self->numOfPoints; i++)
+    if (numOfElements)
+
+    {
+        double normalizedData[numOfElements];
+
+        fit_in_range(rawDataArray, numOfElements, 0.0f, self.frame.size.height, normalizedData);
+        CGContextMoveToPoint(ctx, 0, normalizedData[0]);
+
+        CGFloat x_step = self.frame.size.width / numOfElements;
+
+        for (size_t i = 1; i < numOfElements; i++)
         {
-            CGContextAddLineToPoint(ctx, p[i].x, p[i].y);
+            CGContextAddLineToPoint(ctx, x_step * i, normalizedData[i]);
         }
     }
     CGContextSetLineWidth(ctx, 1);

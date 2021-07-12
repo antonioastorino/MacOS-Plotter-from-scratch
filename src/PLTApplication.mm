@@ -3,9 +3,9 @@
 @implementation PLTApplication
 - (bool)loadPoints:(NSString*)filename
 {
-    if (self.loadedPoints)
+    if (self.rawDataArray)
     {
-        free(self.loadedPoints);
+        free(self.rawDataArray);
     }
 
     NSString* path = [[NSBundle mainBundle] pathForResource:@"floats" ofType:@"txt"];
@@ -17,18 +17,14 @@
     NSArray* lines =
         [content componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 
-    size_t numOfPoints = [lines count];
-    Point2D* points    = (Point2D*)malloc(sizeof(Point2D) * numOfPoints);
-    for (NSUInteger i = 0; i < numOfPoints; i++)
+    size_t numOfElements = [lines count];
+    self.rawDataArray    = (CGFloat*)malloc(sizeof(CGFloat) * numOfElements);
+    for (NSUInteger i = 0; i < numOfElements; i++)
     {
-        CGFloat convertedValue = [((NSString*)[lines objectAtIndex:i]) floatValue];
-   
-        points[i].x = (CGFloat)(i * 2);
-        points[i].y = convertedValue / 2.0f;
+        self.rawDataArray[i] = [((NSString*)[lines objectAtIndex:i]) floatValue];
     }
 
-    self.numOfLoadedPoints = numOfPoints;
-    self.loadedPoints      = points;
+    self.numOfLoadedElements = numOfElements;
     return true;
 }
 @end
