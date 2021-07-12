@@ -22,8 +22,7 @@ extern "C"
 #define LOG_LEVEL_WARN 2
 #define LOG_LEVEL_ERROR 1
 
-    FILE* log_out_file_p;
-    FILE* log_err_file_p;
+
     void get_datetime(char*, const size_t);
 
     void init_logger(const char*, const char*);

@@ -1,5 +1,6 @@
 #import "PLTGenericView.hh"
 #include "c/datahandler.h"
+#include "c/logger.h"
 
 @implementation PLTGenericView
 {
@@ -11,7 +12,6 @@
     if (self)
     {
         self.wantsLayer      = TRUE;
-        self.someColor       = 0;
         self->applicationObj = nil;
     }
     return self;
@@ -24,6 +24,22 @@
         self.wantsLayer = TRUE;
     }
     return self;
+}
+
+- (void)addOffset:(CGFloat)offset
+{
+    CGFloat height = self.frame.size.height;
+    CGFloat width  = self.frame.size.width;
+    if ((offset >= height) || (offset >= width))
+    {
+        LOG_WARN("Offset %lf too large and not applicable.", offset);
+    }
+    else
+    {
+        [self setFrameSize:NSMakeSize(width - 2 * offset, height - 2 * offset)];
+        [self
+            setFrameOrigin:NSMakePoint(self.frame.origin.x + offset, self.frame.origin.y + offset)];
+    }
 }
 
 - (void)setPoints:(PLTApplication*)appObj
@@ -56,7 +72,7 @@
         }
     }
     CGContextSetLineWidth(ctx, 1);
-    const CGFloat colorArray[4] = {0, self.someColor, self.someColor, 1};
+    const CGFloat colorArray[4] = {0.2, 1, 0.2, 1};
     CGColorSpaceRef colorspace  = CGColorSpaceCreateDeviceRGB();
     CGColorRef aColor           = CGColorCreate(colorspace, colorArray);
     CGContextSetStrokeColorWithColor(ctx, aColor);

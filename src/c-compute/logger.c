@@ -15,6 +15,9 @@ void get_datetime(char* datetime, const size_t buf_len)
     strftime(datetime, buf_len, "%Y %b %d %X", ptm);
 }
 
+FILE* log_out_file_p;
+FILE* log_err_file_p;
+
 FILE* get_log_out_file() { return log_out_file_p == NULL ? stdout : log_out_file_p; }
 FILE* get_log_err_file() { return log_err_file_p == NULL ? stdout : log_err_file_p; }
 
