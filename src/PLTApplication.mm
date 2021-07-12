@@ -1,4 +1,5 @@
 #import "PLTApplication.hh"
+#include "c/logger.h"
 
 @implementation PLTApplication
 - (bool)loadPoints:(NSString*)filename
@@ -8,8 +9,7 @@
         free(self.rawDataArray);
     }
 
-    NSString* path = [[NSBundle mainBundle] pathForResource:@"floats" ofType:@"txt"];
-
+    NSString* path    = [[NSBundle mainBundle] pathForResource:filename ofType:@"txt"];
     NSString* content = [NSString stringWithContentsOfFile:path
                                                   encoding:NSUTF8StringEncoding
                                                      error:NULL];
@@ -25,6 +25,19 @@
     }
 
     self.numOfLoadedElements = numOfElements;
+    return true;
+}
+
+- (bool)loadFilters:(NSString*)filename
+{
+
+    NSString* path    = [[NSBundle mainBundle] pathForResource:filename ofType:@"txt"];
+    NSString* content = [NSString stringWithContentsOfFile:path
+                                                  encoding:NSUTF8StringEncoding
+                                                     error:NULL];
+    LOG_DEBUG("File to read: %s", path.UTF8String);
+    self.filterArray =
+        [content componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     return true;
 }
 @end

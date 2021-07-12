@@ -26,6 +26,7 @@
     return self;
 }
 
+
 - (void)addOffset:(CGFloat)offset
 {
     CGFloat height = self.frame.size.height;
@@ -77,5 +78,10 @@
     CGColorRef aColor           = CGColorCreate(colorspace, colorArray);
     CGContextSetStrokeColorWithColor(ctx, aColor);
     CGContextStrokePath(ctx);
+}
+
+- (void)mouseDown:(NSEvent*)event
+{
+    LOG_INFO("Mouse down");
 }
 @end

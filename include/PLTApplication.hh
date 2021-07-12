@@ -7,6 +7,8 @@
 @interface PLTApplication : NSObject
 @property CGFloat* rawDataArray;
 @property size_t numOfLoadedElements;
+@property NSArray *filterArray;
 - (bool)loadPoints:(NSString*)filename;
+- (bool)loadFilters:(NSString*)filename;
 @end
 #endif
