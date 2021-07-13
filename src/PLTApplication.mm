@@ -3,6 +3,7 @@
 #import "PLTGenericView.hh"
 #import "PLTPopUpButton.hh"
 #import "PLTWindow.hh"
+#include "c/datahandler.h"
 #include "c/logger.h"
 
 @implementation PLTApplication
@@ -58,23 +59,28 @@
                                        backing:NSBackingStoreBuffered
                                          defer:YES];
 
-    self->mainView    = [[PLTGenericView alloc] init];
-    self->averageView = [[PLTGenericView alloc] init];
-    self->popUpButton = [[PLTPopUpButton alloc] init];
+    self->mainView       = [[PLTGenericView alloc] init];
+    self->averageView    = [[PLTGenericView alloc] init];
+    self->popUpButton    = [[PLTPopUpButton alloc] init];
     self->windowDelegate = [[PLTAppDelegate alloc] init];
 }
 - (void)configureWindow
 {
     CGFloat windowHeigth = self->window.contentView.bounds.size.height;
     CGFloat windowWidth  = self->window.contentView.bounds.size.width;
+
     [self->mainView setFrame:NSMakeRect(0, windowHeigth / 2, windowWidth, windowHeigth / 2)];
     [self->mainView addOffset:self->offset];
     [self->mainView.layer setBackgroundColor:[NSColor blackColor].CGColor];
+
+    [self->averageView setFrame:NSMakeRect(0, 0, windowWidth, windowHeigth / 2)];
     [self->averageView addOffset:self->offset];
     [self->averageView.layer setBackgroundColor:[NSColor blackColor].CGColor];
-    [self->averageView setFrame:NSMakeRect(0, 0, windowWidth, windowHeigth / 2)];
-    [self->popUpButton setFrame:NSMakeRect(0, windowHeigth / 2 - 20 - self->offset, 200, 20)];
+
+    [self->popUpButton
+        setFrame:NSMakeRect(self->offset, windowHeigth / 2 - 28 - self->offset, 200, 28)];
     [self->popUpButton setPullsDown:YES];
+
     [self->window setBackgroundColor:[NSColor systemGrayColor]];
     [self->window makeKeyAndOrderFront:nil];
     [self->window setTitle:@"plotter"];
@@ -84,7 +90,7 @@
         exit(1);
     }
     [self->mainView setPoints:self.mainPlot];
-    [self->averageView setPoints:self.mainPlot];
+    [self->averageView setPoints:self.averagePlot];
     [self->window setDelegate:windowDelegate];
     [self->popUpButton updateItems:self.filterArray];
     [[self->window contentView] addSubview:mainView];
@@ -143,6 +149,10 @@
         {
         case (PLTEventSubtypeFilterChange):
             LOG_DEBUG("Filter changed to %lu", [event data1]);
+
+            moving_average(self.mainPlot->data, self.mainPlot->numOfElements, 5,
+                           self.averagePlot->data);
+            [self->averageView setNeedsDisplay:YES];
             break;
         default:
             break;
