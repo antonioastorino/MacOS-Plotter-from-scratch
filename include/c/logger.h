@@ -1,7 +1,6 @@
 #ifndef LOGGER_H
 #define LOGGER_H
-
-#define LOG_LEVEL 5
+#include "c/definitions.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -21,7 +20,6 @@ extern "C"
 #define LOG_LEVEL_INFO 3
 #define LOG_LEVEL_WARN 2
 #define LOG_LEVEL_ERROR 1
-
 
     void get_datetime(char*, const size_t);
 

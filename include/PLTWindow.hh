@@ -1,6 +1,7 @@
 #ifndef PLT_WINDOW_HH
 #define PLT_WINDOW_HH
 
+#include "c/definitions.h"
 #import <Cocoa/Cocoa.h>
 
 @interface PLTWindow : NSWindow

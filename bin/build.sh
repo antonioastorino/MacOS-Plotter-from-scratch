@@ -23,10 +23,22 @@ mkdir -p \
 	"${BUILD_DIR}" \
 	"${DIST_ASSETS_DIR}"
 
-# Create list of source files.
-OBJC_SCR_FILES=$(ls src/*.mm)
+# Create list of source files, excluting "main".
+OBJC_SCR_FILES=$(ls src/PLT*.mm)
 C_SRC_FILES=$(ls src/c-compute/*.c)
 OBJ_FILES=""
+
+if [ "$1" = "test" ]; then
+	# Add 'main-test.mm' to the list to run unit tests.
+	OBJC_SCR_FILES="${OBJC_SCR_FILES} main-test.mm"
+	# Set TEST flag to 1 in header file.
+	sed -i.bak 's/^#define TEST.*/#define TEST 1/' "include/c/definitions.h"
+else
+	# Add 'main.mm' to the list to run in normal mode.
+	OBJC_SCR_FILES="${OBJC_SCR_FILES} main.mm"
+	# Set TEST flag to 0 in header file.
+	sed -i.bak 's/^#define TEST.*/#define TEST 0/' "include/c/definitions.h"
+fi
 
 set -x
 # Compile Objective-C++ stuff.
@@ -61,8 +73,10 @@ clang -lc++ \
 	${OBJ_FILES}
 set +x
 
-# Populate bundle.
-cp "${EXECUTABLE}" "${APP_DIR}"
-cp assets/* "${DIST_ASSETS_DIR}"
+if ! [ "$1" == "test" ]; then
+	# Populate bundle.
+	cp "${EXECUTABLE}" "${APP_DIR}"
+	cp assets/* "${DIST_ASSETS_DIR}"
+fi
 
 popd

@@ -25,15 +25,15 @@
         [self addItemWithTitle:[filterList objectAtIndex:i]];
     }
 
-    [self setAction:@selector(test_action:)];
+    [self setAction:@selector(selecteItemDidChange:)];
     [self setTarget:self];
 }
 
-- (void)test_action:(id)sender
+- (void)selecteItemDidChange:(id)sender
 {
     LOG_DEBUG("Changed selection %s", self.selectedItem.title.UTF8String);
     [self setTitle:self.selectedItem.title];
-    NSEvent* event = [NSEvent otherEventWithType:NSApplicationDefined
+    NSEvent* event = [NSEvent otherEventWithType:NSEventTypeApplicationDefined
                                         location:NSMakePoint(0, 0)
                                    modifierFlags:0
                                        timestamp:0

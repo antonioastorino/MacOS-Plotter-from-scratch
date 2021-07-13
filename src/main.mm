@@ -8,6 +8,7 @@
 #import "PLTGlobal.hh"
 #import "PLTPopUpButton.hh"
 #import "PLTWindow.hh"
+#include "c/definitions.h"
 #include "c/logger.h"
 #import <Cocoa/Cocoa.h>
 #include <os/log.h>
@@ -88,7 +89,7 @@ int main(int argc, const char* argv[])
         {
             LOG_TRACE("Mouse down");
         }
-        if ([event type] == NSApplicationDefined)
+        if ([event type] == NSEventTypeApplicationDefined)
         {
             LOG_TRACE("Yuppy");
         }

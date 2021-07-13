@@ -3,13 +3,11 @@
 
 #import "PLTApplication.hh"
 #import "PLTDataTypes.hh"
+#include "c/definitions.h"
 #import <Cocoa/Cocoa.h>
 
 @interface PLTGenericView : NSView
-- (id)initWithFrame:(NSRect)frame;
-- (id)init;
 - (void)addOffset:(CGFloat)offset;
-- (void)drawRect:(NSRect)rect;
 - (void)setPoints:(PLTApplication*)appObj;
 @end
 
