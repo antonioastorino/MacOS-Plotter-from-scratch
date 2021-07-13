@@ -9,8 +9,10 @@
 {
     PLTWindow* window;
     PLTAppDelegate* windowDelegate;
-    PLTGenericView* topView;
+    PLTGenericView* mainView;
+    PLTGenericView* averageView;
     PLTPopUpButton* popUpButton;
+    CGFloat offset;
 }
 - (id)init
 {
@@ -19,6 +21,7 @@
     {
         self.mainPlot    = (PLTSizedFloatArray*)malloc(sizeof(PLTSizedFloatArray));
         self.averagePlot = (PLTSizedFloatArray*)malloc(sizeof(PLTSizedFloatArray));
+        self->offset     = 5.0f;
         [self initLogger];
         [self initWindow];
         [self configureWindow];
@@ -48,29 +51,30 @@
     // Set window style parameters
     NSWindowStyleMask windowStyleMask = NSWindowStyleMaskClosable | NSWindowStyleMaskTitled;
 
-    // https://stackoverflow.com/questions/15694510/programmatically-create-initial-window-of-cocoa-app-os-x
-
     self->window =
         [[PLTWindow alloc] initWithContentRect:NSMakeRect(screenWidth / 4.0f, screenHeight / 4.0f,
                                                           screenWidth / 2.0f, screenHeight / 2.0f)
                                      styleMask:windowStyleMask
                                        backing:NSBackingStoreBuffered
                                          defer:YES];
-    CGFloat windowHeigth = self->window.contentView.bounds.size.height;
-    CGFloat windowWidth  = self->window.contentView.bounds.size.width;
 
-    self->topView = [[PLTGenericView alloc]
-        initWithFrame:NSMakeRect(0, windowHeigth / 2, windowWidth, windowHeigth / 2)];
-
-    self->popUpButton = [[PLTPopUpButton alloc] initWithFrame:NSMakeRect(0, 0, 200, 20)
-                                                    pullsDown:YES];
-
+    self->mainView    = [[PLTGenericView alloc] init];
+    self->averageView = [[PLTGenericView alloc] init];
+    self->popUpButton = [[PLTPopUpButton alloc] init];
     self->windowDelegate = [[PLTAppDelegate alloc] init];
 }
 - (void)configureWindow
 {
-    [self->topView addOffset:5.0f];
-    [self->topView.layer setBackgroundColor:[NSColor blackColor].CGColor];
+    CGFloat windowHeigth = self->window.contentView.bounds.size.height;
+    CGFloat windowWidth  = self->window.contentView.bounds.size.width;
+    [self->mainView setFrame:NSMakeRect(0, windowHeigth / 2, windowWidth, windowHeigth / 2)];
+    [self->mainView addOffset:self->offset];
+    [self->mainView.layer setBackgroundColor:[NSColor blackColor].CGColor];
+    [self->averageView addOffset:self->offset];
+    [self->averageView.layer setBackgroundColor:[NSColor blackColor].CGColor];
+    [self->averageView setFrame:NSMakeRect(0, 0, windowWidth, windowHeigth / 2)];
+    [self->popUpButton setFrame:NSMakeRect(0, windowHeigth / 2 - 20 - self->offset, 200, 20)];
+    [self->popUpButton setPullsDown:YES];
     [self->window setBackgroundColor:[NSColor systemGrayColor]];
     [self->window makeKeyAndOrderFront:nil];
     [self->window setTitle:@"plotter"];
@@ -79,11 +83,13 @@
     {
         exit(1);
     }
-    [self->topView setPoints:self];
-    [self->popUpButton updateItems:self.filterArray];
+    [self->mainView setPoints:self.mainPlot];
+    [self->averageView setPoints:self.mainPlot];
     [self->window setDelegate:windowDelegate];
+    [self->popUpButton updateItems:self.filterArray];
+    [[self->window contentView] addSubview:mainView];
+    [[self->window contentView] addSubview:averageView];
     [[self->window contentView] addSubview:popUpButton];
-    [[self->window contentView] addSubview:topView];
 }
 - (bool)loadPoints:(NSString*)filename
 {
@@ -142,6 +148,6 @@
             break;
         }
     }
-    [self->topView setNeedsDisplay:YES];
+    [self->mainView setNeedsDisplay:YES];
 }
 @end

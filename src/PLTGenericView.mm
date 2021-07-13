@@ -4,7 +4,7 @@
 
 @implementation PLTGenericView
 {
-    PLTApplication* applicationObj;
+    PLTSizedFloatArray* pointArray;
 }
 - (id)initWithFrame:(NSRect)frame
 {
@@ -12,7 +12,7 @@
     if (self)
     {
         self.wantsLayer      = TRUE;
-        self->applicationObj = nil;
+        self->pointArray = nil;
     }
     return self;
 }
@@ -22,7 +22,7 @@
     if (self)
     {
         self.wantsLayer = TRUE;
-        self->applicationObj = nil;
+        self->pointArray = nil;
     }
     return self;
 }
@@ -43,15 +43,15 @@
     }
 }
 
-- (void)setPoints:(PLTApplication*)appObj
+- (void)setPoints:(PLTSizedFloatArray*)ptArray
 {
-    self->applicationObj = appObj;
+    self->pointArray = ptArray;
 }
 
 - (void)drawRect:(NSRect)rect
 {
-    CGFloat* rawDataArray = self->applicationObj.mainPlot->data;
-    size_t numOfElements  = self->applicationObj.mainPlot->numOfElements;
+    CGFloat* rawDataArray = self->pointArray->data;
+    size_t numOfElements  = self->pointArray->numOfElements;
     CGContextRef ctx      = [[NSGraphicsContext currentContext] CGContext];
 
     CGContextBeginPath(ctx);

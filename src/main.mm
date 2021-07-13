@@ -23,11 +23,8 @@ int main(int argc, const char* argv[])
     PLTApplication* applicationObj = [[PLTApplication alloc] init];
 
     NSEvent* event;
-    uint color = 0;
-
     while (PLTGlobal.gAppRunning)
     {
-
         event = [[NSApplication sharedApplication] nextEventMatchingMask:NSEventMaskAny
                                                                untilDate:[NSDate distantFuture]
                                                                   inMode:NSDefaultRunLoopMode
