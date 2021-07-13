@@ -1,7 +1,6 @@
 #include "c/logger.h"
 #include <stdlib.h>
 
-
 #if LOG_LEVEL > 0
 void get_datetime(char* datetime, const size_t buf_len)
 {

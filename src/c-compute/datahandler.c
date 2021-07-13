@@ -18,8 +18,8 @@ void max_min(const double* data, size_t num_of_elements, double* max, double* mi
     }
 }
 
-void fit_in_range(const double* in_data, const size_t num_of_elements, const double range_min, const double range_max,
-                  double* out_data)
+void fit_in_range(const double* in_data, const size_t num_of_elements, const double range_min,
+                  const double range_max, double* out_data)
 {
     double max, min;
     max_min(in_data, num_of_elements, &max, &min);
@@ -28,7 +28,8 @@ void fit_in_range(const double* in_data, const size_t num_of_elements, const dou
         out_data[i] = ((in_data[i] - min) / range) * (range_max - range_min) + range_min;
 }
 
-void moving_average(const double* in_data, const size_t num_of_elements, const size_t window_size, double* out_data)
+void moving_average(const double* in_data, const size_t num_of_elements, const size_t window_size,
+                    double* out_data)
 {
     // No average computed for the first `(window_size - 1)` elements.
     double average_in_window     = 0;
@@ -49,7 +50,7 @@ void moving_average(const double* in_data, const size_t num_of_elements, const s
         */
         double last_value_in_window = in_data[i] / window_size;
         average_in_window = average_in_window - first_value_in_window + last_value_in_window;
-        out_data[i]           = average_in_window;
+        out_data[i]       = average_in_window;
         // Update the first value.
         first_value_in_window = in_data[i - window_size + 1] / window_size;
     }
@@ -60,9 +61,9 @@ void test_datahandler()
 {
     PRINT_BANNER;
     PRINT_TEST_TITLE("fit_in_range()");
-    const size_t num_of_elements = 10;
+    const size_t num_of_elements            = 10;
     const double test_data[num_of_elements] = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
-    double out_data[num_of_elements]  = {0};
+    double out_data[num_of_elements]        = {0};
     fit_in_range(test_data, num_of_elements, 11.0f, 20.0f, out_data);
     ASSERT_EQ(out_data[0], 11.0f, "First element correct.");
     ASSERT_EQ(out_data[4], 15.0f, "Fifth element correct.");
@@ -70,7 +71,8 @@ void test_datahandler()
 
     PRINT_TEST_TITLE("moving_average() - window size: 1");
     moving_average(test_data, num_of_elements, 1, out_data);
-    for (size_t i = 0; i < num_of_elements; i++) {
+    for (size_t i = 0; i < num_of_elements; i++)
+    {
         ASSERT_EQ(out_data[i], test_data[i], "unchanged as expected");
     }
     PRINT_TEST_TITLE("moving_average() - window size: 2");

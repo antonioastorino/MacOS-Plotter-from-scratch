@@ -20,7 +20,8 @@
     [self setTitle:self.selectedItem.title];
     LOG_DEBUG("Changed selection %s", self.title.UTF8String);
     NSInteger value;
-    if(![[NSScanner scannerWithString:self.title] scanInteger:&value]) {
+    if (![[NSScanner scannerWithString:self.title] scanInteger:&value])
+    {
         LOG_WARN("The title %s does not contain the saught integer", self.title.UTF8String);
         return;
     }
