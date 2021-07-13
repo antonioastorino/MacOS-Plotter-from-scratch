@@ -5,8 +5,7 @@
 #import <Cocoa/Cocoa.h>
 
 @interface PLTPopUpButton : NSPopUpButton
-- (void)initialize:(PLTApplication*)appObj;
-- (void)updateItems;
+- (void)updateItems:(NSArray*)filterList;
 - (void)selecteItemDidChange:(id)sender;
 @end
 

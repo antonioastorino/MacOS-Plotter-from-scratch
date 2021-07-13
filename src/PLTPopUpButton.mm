@@ -3,23 +3,9 @@
 #include "c/logger.h"
 
 @implementation PLTPopUpButton
-{
-    PLTApplication* applicationObj;
-}
-- (void)initialize:(PLTApplication*)appObj
-{
-    if (self->applicationObj)
-    {
-        LOG_WARN("Pop up button already initialized");
-        return;
-    }
-    self->applicationObj = appObj;
-    [self updateItems];
-}
 
-- (void)updateItems
+- (void)updateItems:(NSArray*)filterList
 {
-    NSArray* filterList = self->applicationObj.filterArray;
     for (size_t i = 0; i < filterList.count; i++)
     {
         [self addItemWithTitle:[filterList objectAtIndex:i]];
@@ -40,7 +26,7 @@
                                     windowNumber:0
                                          context:nil
                                          subtype:0
-                                           data1:0
+                                           data1:[self indexOfSelectedItem]
                                            data2:0];
     [[NSApplication sharedApplication] postEvent:event atStart:YES];
 }

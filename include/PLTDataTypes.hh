@@ -8,4 +8,9 @@ typedef struct PLTSizedFloatArray
     CGFloat* data;
     size_t numOfElements;
 } PLTSizedFloatArray;
+
+enum PLTEventSubtype
+{
+    PLTEventSubtypeFilterChange
+};
 #endif

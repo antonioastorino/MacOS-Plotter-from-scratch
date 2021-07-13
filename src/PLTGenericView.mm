@@ -22,6 +22,7 @@
     if (self)
     {
         self.wantsLayer = TRUE;
+        self->applicationObj = nil;
     }
     return self;
 }

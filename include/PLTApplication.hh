@@ -7,9 +7,11 @@
 
 @interface PLTApplication : NSObject
 @property PLTSizedFloatArray* mainPlot;
+@property PLTSizedFloatArray* averagePlot;
 @property NSArray* filterArray;
 - (bool)loadPoints:(NSString*)filename;
 - (bool)loadFilters:(NSString*)filename;
+- (void)update:(NSEvent*)event;
 @end
 
 #if TEST == 1
