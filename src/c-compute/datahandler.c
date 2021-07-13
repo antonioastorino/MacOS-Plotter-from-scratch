@@ -29,6 +29,15 @@ void fit_in_range(double* in_data, size_t num_of_elements, double range_min, dou
 }
 
 #if TEST == 1
-void test_datahandler() { PRINT_BANNER; }
+void test_datahandler()
+{
+    PRINT_BANNER;
+    double test_data[10] = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
+    double out_data[10]  = {0};
+    fit_in_range(test_data, 10, 11.0f, 20.0f, out_data);
+    ASSERT_EQ(out_data[0], 11.0f, "First element correct.");
+    ASSERT_EQ(out_data[4], 15.0f, "Fifth element correct.");
+    ASSERT_EQ(out_data[9], 20.0f, "Last element correct.");
+}
 
 #endif
