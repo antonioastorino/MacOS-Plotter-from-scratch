@@ -3,10 +3,9 @@
 #include "c/definitions.h"
 #import <Cocoa/Cocoa.h>
 
-typedef struct Point2D
+typedef struct PLTSizedFloatArray
 {
-    CGFloat x;
-    CGFloat y;
-} Point2D;
-
+    CGFloat* data;
+    size_t numOfElements;
+} PLTSizedFloatArray;
 #endif

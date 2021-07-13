@@ -26,7 +26,6 @@
     return self;
 }
 
-
 - (void)addOffset:(CGFloat)offset
 {
     CGFloat height = self.frame.size.height;
@@ -50,8 +49,8 @@
 
 - (void)drawRect:(NSRect)rect
 {
-    CGFloat* rawDataArray = self->applicationObj.rawDataArray;
-    size_t numOfElements  = self->applicationObj.numOfLoadedElements;
+    CGFloat* rawDataArray = self->applicationObj.mainPlot->data;
+    size_t numOfElements  = self->applicationObj.mainPlot->numOfElements;
     CGContextRef ctx      = [[NSGraphicsContext currentContext] CGContext];
 
     CGContextBeginPath(ctx);

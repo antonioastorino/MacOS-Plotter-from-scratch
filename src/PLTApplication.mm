@@ -2,13 +2,22 @@
 #include "c/logger.h"
 
 @implementation PLTApplication
+- (id)init
+{
+    self = [super init];
+    if (self)
+    {
+        self.mainPlot = (PLTSizedFloatArray*)malloc(sizeof(PLTSizedFloatArray));
+    }
+    return self;
+}
 - (bool)loadPoints:(NSString*)filename
 {
-    if (self.rawDataArray)
+    if (self.mainPlot)
     {
-        free(self.rawDataArray);
+        free(self.mainPlot->data);
+        self.mainPlot->data = nil;
     }
-
     NSString* path    = [[NSBundle mainBundle] pathForResource:filename ofType:@"txt"];
     NSString* content = [NSString stringWithContentsOfFile:path
                                                   encoding:NSUTF8StringEncoding
@@ -18,13 +27,13 @@
         [content componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 
     size_t numOfElements = [lines count];
-    self.rawDataArray    = (CGFloat*)malloc(sizeof(CGFloat) * numOfElements);
+    self.mainPlot->data   = (CGFloat*)malloc(sizeof(CGFloat) * numOfElements);
     for (NSUInteger i = 0; i < numOfElements; i++)
     {
-        self.rawDataArray[i] = [((NSString*)[lines objectAtIndex:i]) floatValue];
+        self.mainPlot->data[i] = [((NSString*)[lines objectAtIndex:i]) floatValue];
     }
 
-    self.numOfLoadedElements = numOfElements;
+    self.mainPlot->numOfElements = numOfElements;
     return true;
 }
 
