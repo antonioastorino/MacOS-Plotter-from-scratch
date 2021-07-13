@@ -29,14 +29,6 @@ int main(int argc, const char* argv[])
                                                                untilDate:[NSDate distantFuture]
                                                                   inMode:NSDefaultRunLoopMode
                                                                  dequeue:YES];
-        if ([event type] == NSEventTypeLeftMouseDown)
-        {
-            LOG_TRACE("Mouse down");
-        }
-        if ([event type] == NSEventTypeApplicationDefined)
-        {
-            LOG_TRACE("Yuppy");
-        }
 
         [applicationObj update:event];
 

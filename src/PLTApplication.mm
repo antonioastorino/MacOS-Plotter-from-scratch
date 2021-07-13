@@ -148,12 +148,14 @@
         switch ([event subtype])
         {
         case (PLTEventSubtypeFilterChange):
-            LOG_DEBUG("Filter changed to %lu", [event data1]);
-
-            moving_average(self.mainPlot->data, self.mainPlot->numOfElements, 5,
+        {
+            size_t window_size = [event data1];
+            LOG_DEBUG("Filter changed to %lu", window_size);
+            moving_average(self.mainPlot->data, self.mainPlot->numOfElements, window_size,
                            self.averagePlot->data);
             [self->averageView setNeedsDisplay:YES];
             break;
+        }
         default:
             break;
         }

@@ -17,8 +17,13 @@
 
 - (void)selecteItemDidChange:(id)sender
 {
-    LOG_DEBUG("Changed selection %s", self.selectedItem.title.UTF8String);
     [self setTitle:self.selectedItem.title];
+    LOG_DEBUG("Changed selection %s", self.title.UTF8String);
+    NSInteger value;
+    if(![[NSScanner scannerWithString:self.title] scanInteger:&value]) {
+        LOG_WARN("The title %s does not contain the saught integer", self.title.UTF8String);
+        return;
+    }
     NSEvent* event = [NSEvent otherEventWithType:NSEventTypeApplicationDefined
                                         location:NSMakePoint(0, 0)
                                    modifierFlags:0
@@ -26,7 +31,7 @@
                                     windowNumber:0
                                          context:nil
                                          subtype:0
-                                           data1:[self indexOfSelectedItem]
+                                           data1:value
                                            data2:0];
     [[NSApplication sharedApplication] postEvent:event atStart:YES];
 }

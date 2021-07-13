@@ -11,7 +11,7 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        self.wantsLayer      = TRUE;
+        self.wantsLayer  = TRUE;
         self->pointArray = nil;
     }
     return self;
@@ -21,7 +21,7 @@
     self = [super init];
     if (self)
     {
-        self.wantsLayer = TRUE;
+        self.wantsLayer  = TRUE;
         self->pointArray = nil;
     }
     return self;
