@@ -46,6 +46,15 @@ else
 fi
 
 set -x
+
+# Format headers
+OBJC_HEAER_FILES=$(find -L include/ | grep "\.hh$")
+C_HEADER_FILES=$(find -L include/ | grep "\.h$")
+HEADER_FILES=`printf "${OBJC_HEAER_FILES}\n${C_HEADER_FILES}"`
+for header_file in ${HEADER_FILES[@]}; do
+	f__clang_format $header_file
+done
+
 # Format and compile Objective-C++ stuff.
 for obj_file in ${OBJC_SCR_FILES[@]}; do
 	f__clang_format "$obj_file"
