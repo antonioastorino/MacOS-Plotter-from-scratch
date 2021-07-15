@@ -2,3 +2,4 @@ plotter*
 build
 notes.txt
 *.bak
+Makefile
