@@ -16,4 +16,5 @@ fi
 	"${APP_NAME}.dSYM" \
 	"${BUILD_DIR}" \
 	"${MAKE_FILE}" \
+	"${TEST_FOLDER}" \
 	*.list

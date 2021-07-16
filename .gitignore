@@ -3,3 +3,4 @@ build
 notes.txt
 *.bak
 Makefile
+test*.log

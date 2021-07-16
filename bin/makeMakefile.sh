@@ -80,12 +80,17 @@ pf "\nsetup:"
 pf "\n\t@mkdir -p \\"
 pf "\n\t${APP_DIR} \\"
 pf "\n\t${DIST_ASSETS_DIR} \\"
+pf "\n\t${TEST_FOLDER} \\"
 pf "\n\t${BUILD_DIR}"
+
+# Set TEST to 1 in case MODE==TEST and run unit tests
 pf "\n\t@if [ \"\$(MODE)\" = \"TEST\" ]; then \\"
 pf "\n\t[ \`grep -c '^#define TEST 0' \$(BD)/${DEF_HEADER}\` -eq 1 ] && \\"
 pf "\n\tsed -i.bak 's/^#define TEST 0/#define TEST 1/g' \$(BD)/${DEF_HEADER}; \\"
 pf "\n\tmake -C \$(BD) ${BUILD_DIR}/${APP_NAME}-test; \\"
 pf "\n\telse \\"
+
+# Reset TEST and MEM_ANALYSIS in case as default behavior.
 pf "\n\t[ \`grep -c '^#define TEST 1' \$(BD)/${DEF_HEADER}\` -eq 1 ] && \\"
 pf "\n\tsed -i.bak 's/^#define TEST 1/#define TEST 0/g' \$(BD)/${DEF_HEADER}; \\"
 pf "\n\tmake -C \$(BD) ${BUILD_DIR}/${APP_NAME}; \\"
