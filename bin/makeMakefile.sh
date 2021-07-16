@@ -4,9 +4,6 @@ if [ -z $APP_NAME ]; then exit 1; fi
 
 set -e
 
-HEADER_PATHS="include"
-SRC_PATHS="src"
-
 pushd "$BD"
 bin/cleanup.sh
 
@@ -28,7 +25,7 @@ for EXTENSION in ${SRC_EXTENSIONS[@]}; do
 	done
 done
 
-for EXTENSION in ${INC_EXTENSIONS}; do
+for EXTENSION in ${INC_EXTENSIONS[@]}; do
 	for f in $(find $HEADER_PATHS -name "*.${EXTENSION}"); do
 		echo $(dirname $f) >>header-dir.list
 	done

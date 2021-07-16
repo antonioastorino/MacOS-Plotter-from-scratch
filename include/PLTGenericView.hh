@@ -2,7 +2,7 @@
 #define PLT_GENERIC_VIEW_HH
 
 #import "PLTDataTypes.hh"
-#include "c/definitions.h"
+#include "definitions.h"
 #import <Cocoa/Cocoa.h>
 
 @interface PLTGenericView : NSView

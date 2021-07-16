@@ -15,3 +15,7 @@ MAIN="main"
 MAIN_TEST="main-test"
 SRC_EXTENSIONS=("mm" "c")
 INC_EXTENSIONS=("hh" "h")
+
+HEADER_PATHS="include"
+SRC_PATHS="src"
+

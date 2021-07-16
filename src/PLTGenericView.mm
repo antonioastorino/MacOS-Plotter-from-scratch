@@ -1,6 +1,6 @@
 #import "PLTGenericView.hh"
-#include "c/datahandler.h"
-#include "c/logger.h"
+#include "datahandler.h"
+#include "logger.h"
 
 @implementation PLTGenericView
 {

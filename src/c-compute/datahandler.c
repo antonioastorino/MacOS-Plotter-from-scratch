@@ -1,5 +1,5 @@
-#include "c/datahandler.h"
-#include "c/definitions.h"
+#include "datahandler.h"
+#include "definitions.h"
 #include <limits.h>
 
 void max_min(const double* data, size_t num_of_elements, double* max, double* min)

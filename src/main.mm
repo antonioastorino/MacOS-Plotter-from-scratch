@@ -8,8 +8,8 @@
 #import "PLTGlobal.hh"
 #import "PLTPopUpButton.hh"
 #import "PLTWindow.hh"
-#include "c/definitions.h"
-#include "c/logger.h"
+#include "definitions.h"
+#include "logger.h"
 #import <Cocoa/Cocoa.h>
 #include <os/log.h>
 #include <stdlib.h>

@@ -3,8 +3,8 @@
 #import "PLTGenericView.hh"
 #import "PLTPopUpButton.hh"
 #import "PLTWindow.hh"
-#include "c/datahandler.h"
-#include "c/logger.h"
+#include "datahandler.h"
+#include "logger.h"
 
 @implementation PLTApplication
 {

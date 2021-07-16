@@ -1,6 +1,6 @@
 #ifndef DATA_HEADER_H
 #define DATA_HEADER_H
-#include "c/definitions.h"
+#include "definitions.h"
 #include <ctype.h>
 
 #if defined __cplusplus

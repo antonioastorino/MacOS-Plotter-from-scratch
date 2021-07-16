@@ -1,6 +1,6 @@
 #import "PLTAppDelegate.hh"
 #import "PLTGlobal.hh"
-#include "c/logger.h"
+#include "logger.h"
 
 @implementation PLTAppDelegate
 - (void)windowWillClose:(NSNotification*)notification

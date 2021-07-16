@@ -3,7 +3,7 @@
 
 #import "PLTDataTypes.hh"
 #import "PLTGlobal.hh"
-#include "c/definitions.h"
+#include "definitions.h"
 
 @interface PLTApplication : NSObject
 @property PLTSizedFloatArray* mainPlot;

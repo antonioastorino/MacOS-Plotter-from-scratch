@@ -4,7 +4,7 @@
 // Log level.
 #define LOG_LEVEL 5
 // Run in unit test mode.
-#define TEST 0
+#define TEST 1
 
 #include <stdio.h>
 #include <string.h>
